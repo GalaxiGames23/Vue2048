@@ -56,12 +56,12 @@ jobs:
         path: ./dist
     
     - name: Typechecking and linting
-      if: github.event_name = 'pull_request'
+      if: github.event_name == 'pull_request'
       run:
         pnpm type-check
         pnpm lint
     - name: Run test
-      if: github.event_name = 'pull_request'
+      if: github.event_name == 'pull_request'
       run:
         pnpm test
         
