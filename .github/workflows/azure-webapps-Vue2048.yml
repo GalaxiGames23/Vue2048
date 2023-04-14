@@ -25,7 +25,7 @@ on:
 env:
   AZURE_WEBAPP_NAME: stapp-vue2048-prod   # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: './dist/'      # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '14.x'                # set this to the node version to use
+  NODE_VERSION: '18.x'                # set this to the node version to use
 
 permissions:
   contents: read
@@ -37,7 +37,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: pnpm/action-setup@v2
       with:
-        version: 6.0.2
+        version: latest
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
