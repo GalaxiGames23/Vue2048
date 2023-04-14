@@ -61,8 +61,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Development'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      name: 'Prod'
+      url: ${{ https://ashy-smoke-0c9b43a03.2.azurestaticapps.net/ }}
 
     steps:
     - name: Download artifact from build job
