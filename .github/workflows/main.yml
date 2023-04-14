@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-    if: github.event_name == 'push'
     runs-on: 'ubuntu-latest'
     steps:
       - run: pnpm install
