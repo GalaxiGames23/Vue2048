@@ -62,7 +62,7 @@ jobs:
     needs: build
     environment:
       name: 'Prod'
-      url: ${{ https://ashy-smoke-0c9b43a03.2.azurestaticapps.net/ }}
+      url: "${{ 'https://ashy-smoke-0c9b43a03.2.azurestaticapps.net/' }}"
 
     steps:
     - name: Download artifact from build job
