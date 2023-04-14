@@ -1,13 +1,14 @@
 name: CI
 
 on:
- # Trigger the workflow on push or pull request,
- # but only for the main branch
- push:
- branches:
- - main
+  push:
+    branches:
+      - main
+
+jobs:
   build:
     if: github.event_name == 'push'
     runs-on: 'ubuntu-latest'
-    - run: pnpm install
-    - run: pnpm run
+    steps:
+      - run: pnpm install
+      - run: pnpm run
