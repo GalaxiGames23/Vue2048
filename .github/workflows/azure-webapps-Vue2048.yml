@@ -24,6 +24,15 @@ on:
   push:
     branches: [ "master" ]
   workflow_dispatch:
+    inputs:
+        run_static_analysis:
+          description: 'Exécuter les analyses statiques ?'
+          required: true
+          default: false
+        run_tests:
+          description: 'Exécuter les tests ?'
+          required: true
+          default: false
 
 env:
   AZURE_WEBAPP_NAME: stapp-vue2048-prod   # set this to your application's name
@@ -69,12 +78,12 @@ jobs:
         retention-days: 1
         
     - name: Typechecking and linting
-      if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request' || github.event.inputs.run_static_analysis
       run : |
           echo "pnpm type-check"
           echo "pnpm eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
     
-    - name : Pnpm test
+    - name : Pnpm test || github.event.inputs.run_tests
       if: github.event_name == 'pull_request'
       run: |
           echo "pnpm vitest"
