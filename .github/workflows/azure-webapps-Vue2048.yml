@@ -19,6 +19,8 @@
 
 
 on:
+  schedule:
+    - cron: "0 8 * * 1"
   push:
     branches: [ "master" ]
   workflow_dispatch:
@@ -45,7 +47,7 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'pnpm'
 
-    - name: pnpm install, build, and test
+    - name: pnpm install
       run: |
         pnpm install
         pnpm build 
@@ -67,12 +69,12 @@ jobs:
         retention-days: 1
         
     - name: Typechecking and linting
-      if: github.event_name == 'pull_request'
+      #if: github.event_name == 'pull_request'
       run:
         pnpm type-check
         pnpm lint
     - name: Run test
-      if: github.event_name == 'pull_request'
+      #if: github.event_name == 'pull_request'
       run:
         pnpm test
         
