@@ -52,10 +52,20 @@ jobs:
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
+      if: github.ref == 'refs/heads/main'
       with:
         name: node-app
         path: ./dist
-    
+        retention-days: 7
+        
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v3
+      if: github.ref != 'refs/heads/main'
+      with:
+        name: node-app
+        path: ./dist
+        retention-days: 1
+        
     - name: Typechecking and linting
       if: github.event_name == 'pull_request'
       run:
