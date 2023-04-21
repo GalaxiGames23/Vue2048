@@ -69,13 +69,13 @@ jobs:
         retention-days: 1
         
     - name: Typechecking and linting
-      #if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request'
       run : |
           echo "pnpm type-check"
           echo "pnpm eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
     
-    - name : test
-      #if: github.event_name == 'pull_request'
+    - name : Pnpm test
+      if: github.event_name == 'pull_request'
       run: |
           echo "pnpm vitest"
         
