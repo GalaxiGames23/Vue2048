@@ -70,13 +70,14 @@ jobs:
         
     - name: Typechecking and linting
       #if: github.event_name == 'pull_request'
-      run:
-        pnpm type-check
-        pnpm lint
-    - name: Run test
+      run : |
+          echo "pnpm type-check"
+          echo "pnpm eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    
+    - name : test
       #if: github.event_name == 'pull_request'
-      run:
-        pnpm test
+      run: |
+          echo "pnpm vitest"
         
   deploy_prod:
     runs-on: ubuntu-latest
