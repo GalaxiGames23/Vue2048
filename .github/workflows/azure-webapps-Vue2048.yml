@@ -83,8 +83,8 @@ jobs:
           echo "pnpm type-check"
           echo "pnpm eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
     
-    - name : Pnpm test || github.event.inputs.run_tests
-      if: github.event_name == 'pull_request'
+    - name : Pnpm test 
+      if: github.event_name == 'pull_request' || github.event.inputs.run_tests
       run: |
           echo "pnpm vitest"
         
