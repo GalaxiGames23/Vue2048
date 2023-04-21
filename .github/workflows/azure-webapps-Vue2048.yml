@@ -22,6 +22,8 @@ on:
   schedule:
     - cron: "0 8 * * 1"
   push:
+    paths-ignore:
+      - 'docs/**'
     branches: [ "master" ]
   workflow_dispatch:
     inputs:
