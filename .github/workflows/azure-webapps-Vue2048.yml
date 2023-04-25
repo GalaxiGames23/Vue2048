@@ -17,15 +17,16 @@ on:
           description: 'Exécuter les tests ?'
           required: true
           default: false
-
-env:
-  AZURE_WEBAPP_NAME: stapp-vue2048-prod   # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: './dist/'      # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '18.x'                # set this to the node version to use
-  TEMP_ENV_GROUP: rg-vue2048-prod
-  TEMP_ENV: test
 permissions:
   contents: read
+  id-token: write
+
+env:
+  AZURE_WEBAPP_NAME: stapp-vue2048-prod   
+  AZURE_WEBAPP_PACKAGE_PATH: './dist/'      
+  NODE_VERSION: '18.x'               
+  TEMP_ENV_GROUP: rg-vue2048-prod
+  TEMP_ENV: test
 
 jobs:
   build:
@@ -113,40 +114,38 @@ jobs:
           action: upload
           azure_static_web_apps_api_token: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           app_artifact_location: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          
+  # Nous avons essayé de faire la partie aller plus loin mais sans succès
+  #deploy_temp:
+  #  runs-on: ubuntu-latest
+  #  if: |
+  #    github.event_name == 'pull_request' && (
+  #      github.event.action == 'labeled' || 
+  #      github.event.action == 'unlabeled' || 
+  #      github.event.action == 'opened' || 
+  #      github.event.action == 'synchronize' || 
+  #      github.event.action == 'closed'
+  #    )
+  #  steps:
+  #  - name: Checkout repository
+  #    uses: actions/checkout@v2
+  #    
+  #  - name: Login to Azure
+  #    uses: azure/login@v1
+  #    with:
+  #      creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-  deploy_temp:
-    runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'pull_request' && (
-        github.event.action == 'labeled' || 
-        github.event.action == 'unlabeled' || 
-        github.event.action == 'opened' || 
-        github.event.action == 'synchronize' || 
-        github.event.action == 'closed'
-      )
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      
-    - name: Login to Azure
-      uses: azure/login@v1
-      with:
-        client-id: mlam003@outlook.fr
-        tenant-id: 2f905265-c107-4ce0-87c1-340f43db77d1
-        subscription-id: 29a7bdaa-7c1d-4f91-b477-b9f57f19b2a3
-
-    - name: Deploy to temporary environment
-      run: |
-        if [[ "${{ github.event.label.name }}" == "label" || "${{ github.event.action }}" != "labeled" ]]; then
-          az webapp create --name TEMP_ENV --resource-group TEMP_ENV_GROUP --plan https://black-bay-0bfdc7403.3.azurestaticapps.net/ --runtime "NODE|18.x" --deployment-source-url ${{ github.event.pull_request.head.repo.html_url }} --deployment-source-branch ${{ github.event.pull_request.head.ref }}
-          TEMP_ENV_URL=$(az webapp show --name TEMP_ENV --resource-group TEMP_ENV_GROUP --query 'defaultHostName' --output tsv)
-
-          PR_COMMENT="Temporary environment deployed: https://${TEMP_ENV_URL}"
-          PR_COMMENT_URL="${{ github.event.pull_request.comments_url }}"
-          curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/json" --data "{\"body\": \"$PR_COMMENT\"}" -X POST "$PR_COMMENT_URL"
-        fi
-        if [ "${{ github.event.action }}" == "closed" ]; then
-          echo "Destroying temporary environment..."
-          az webapp delete --name TEMP_ENV --resource-group TEMP_ENV_GROUP
-        fi
-        az logout
+  #  - name: Deploy to temporary environment
+  #    run: |
+  #      if [[ "${{ github.event.label.name }}" == "label" || "${{ github.event.action }}" != "labeled" ]]; then
+  #        az webapp create --name TEMP_ENV --resource-group TEMP_ENV_GROUP --plan https://black-bay-0bfdc7403.3.azurestaticapps.net/ --runtime "NODE|18.x" --deployment-source-url ${{ github.event.pull_request.head.repo.html_url }} --deployment-source-branch ${{ github.event.pull_request.head.ref }}
+  #        TEMP_ENV_URL=$(az webapp show --name TEMP_ENV --resource-group TEMP_ENV_GROUP --query 'defaultHostName' --output tsv)
+  #        PR_COMMENT="Temporary environment deployed: https://${TEMP_ENV_URL}"
+  #        PR_COMMENT_URL="${{ github.event.pull_request.comments_url }}"
+  #        curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/json" --data "{\"body\": \"$PR_COMMENT\"}" -X POST "$PR_COMMENT_URL"
+  #      fi
+  #      if [ "${{ github.event.action }}" == "closed" ]; then
+  #        echo "Destroying temporary environment..."
+  #        az webapp delete --name TEMP_ENV --resource-group TEMP_ENV_GROUP
+  #      fi
+  #      az logout
