@@ -129,6 +129,7 @@ jobs:
 
     - name: Deploy to temporary environment
       run: |
+        az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
         if [[ "${{ github.event.label.name }}" == "label" || "${{ github.event.action }}" != "labeled" ]]; then
           echo "Creating temporary environment..."
           az webapp create --name TEMP_ENV --resource-group TEMP_ENV_GROUP --plan https://black-bay-0bfdc7403.3.azurestaticapps.net/ --runtime "NODE|18.x" --deployment-source-url ${{ github.event.pull_request.head.repo.html_url }} --deployment-source-branch ${{ github.event.pull_request.head.ref }}
@@ -145,3 +146,4 @@ jobs:
           echo "Destroying temporary environment..."
           az webapp delete --name TEMP_ENV --resource-group TEMP_ENV_GROUP
         fi
+        az logout
