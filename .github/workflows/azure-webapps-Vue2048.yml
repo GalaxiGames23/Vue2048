@@ -145,7 +145,6 @@ jobs:
   #        curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: application/json" --data "{\"body\": \"$PR_COMMENT\"}" -X POST "$PR_COMMENT_URL"
   #      fi
   #      if [ "${{ github.event.action }}" == "closed" ]; then
-  #        echo "Destroying temporary environment..."
   #        az webapp delete --name TEMP_ENV --resource-group TEMP_ENV_GROUP
   #      fi
   #      az logout
