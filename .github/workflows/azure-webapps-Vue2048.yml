@@ -46,6 +46,7 @@ jobs:
       run: |
         pnpm install
         pnpm build 
+      working-directory: infra
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
       if: github.ref == 'refs/heads/main'
