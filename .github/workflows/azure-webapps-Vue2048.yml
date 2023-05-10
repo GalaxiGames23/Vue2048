@@ -87,7 +87,7 @@ jobs:
       with:
         name: node-app
         
-    - uses: pulumi/actions@v4
+    - uses: pulumi/actions@v4.2.1
       with:
         command: up
         stack-name: ei8it213/mltlmc-vue-2048
